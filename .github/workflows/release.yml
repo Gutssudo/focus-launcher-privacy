@@ -1,0 +1,85 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Déclenche sur les tags commençant par 'v' (ex: v1.0.0)
+  workflow_dispatch:  # Permet le déclenchement manuel depuis GitHub
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Grant execute permission for gradlew
+        run: |
+          cd MiniumApps
+          chmod +x gradlew
+
+      - name: Build Alpha Release APK
+        run: |
+          cd MiniumApps
+          ./gradlew :launcher3:assembleAlphaRelease
+
+      - name: Build Beta Release APK
+        run: |
+          cd MiniumApps
+          ./gradlew :launcher3:assembleBetaRelease
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            ## Focus Launcher ${{ steps.get_version.outputs.VERSION }}
+
+            ### APKs disponibles
+            - **Alpha Release**: Version alpha pour les tests
+            - **Beta Release**: Version beta plus stable
+
+            ### Installation
+            1. Téléchargez l'APK correspondant à la version souhaitée
+            2. Activez l'installation depuis des sources inconnues sur votre appareil Android
+            3. Installez l'APK
+
+            ### Changements
+            Consultez les commits pour voir les changements de cette version.
+
+      - name: Upload Alpha Release APK
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: MiniumApps/launcher3/build/outputs/apk/alpha/release/launcher3-alpha-release-unsigned.apk
+          asset_name: FocusLauncher-Alpha-${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Beta Release APK
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: MiniumApps/launcher3/build/outputs/apk/beta/release/launcher3-beta-release-unsigned.apk
+          asset_name: FocusLauncher-Beta-${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
