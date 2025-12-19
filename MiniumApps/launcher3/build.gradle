@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+// ❌ Firebase plugin supprimé (privacy-first)
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'com.google.firebase.crashlytics'
+// ❌ Firebase Crashlytics plugin supprimé (privacy-first)
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
@@ -104,16 +104,18 @@ dependencies {
     implementation "com.github.yuweiguocn:GreenDaoUpgradeHelper:$greenDaoUpgradeHelperVersion"
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
     debugImplementation "com.amitshekhar.android:debug-db:$debugDBVersion"
-    implementation 'com.google.firebase:firebase-core:12.0.0'
-    implementation 'com.google.firebase:firebase-database:12.0.0'
+    // ❌ Firebase dépendances supprimées (privacy-first)
+    // ❌ firebase-core:12.0.0 - TRACKING SUPPRIMÉ
+    // ❌ firebase-database:12.0.0 - TRACKING SUPPRIMÉ
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.github.javiersantos:AppUpdater:2.6.4'
     implementation 'com.github.clans:fab:1.6.4'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'com.wdullaer:materialdatetimepicker:3.4.1'
-    implementation files('libs/activation.jar')
+    // ❌ Mail JAR supprimés (privacy-first) - Remplacé par Intent Android natif
+    // ❌ activation.jar - SUPPRIMÉ
     implementation files('libs/additionnal.jar')
-    implementation files('libs/mail.jar')
+    // ❌ mail.jar - SUPPRIMÉ
     implementation 'me.relex:circleindicator:1.2.2@aar'
 // indicator for view pager
     implementation 'com.evernote:android-sdk:2.0.0-RC4'
@@ -155,11 +157,12 @@ dependencies {
     implementation 'com.commit451:PhotoView:1.2.4'
     implementation 'org.jsoup:jsoup:1.11.3'
 
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
-    implementation 'com.google.firebase:firebase-analytics:19.0.1'
-    implementation 'com.google.firebase:firebase-config-ktx:20.0.4'
-    implementation 'com.google.firebase:firebase-messaging:21.1.0'
-    implementation 'com.google.firebase:firebase-config-ktx:20.0.4'
+    // ❌ TOUTES les dépendances Firebase supprimées (privacy-first)
+    // ❌ firebase-crashlytics:18.2.1 - CRASH TRACKING SUPPRIMÉ
+    // ❌ firebase-analytics:19.0.1 - ANALYTICS TRACKING SUPPRIMÉ
+    // ❌ firebase-config-ktx:20.0.4 - REMOTE CONFIG SUPPRIMÉ
+    // ❌ firebase-messaging:21.1.0 - PUSH MESSAGING SUPPRIMÉ
+    // ✅ Votre vie privée est maintenant protégée !
 
     implementation 'com.google.android.play:core-ktx:1.8.1'
 

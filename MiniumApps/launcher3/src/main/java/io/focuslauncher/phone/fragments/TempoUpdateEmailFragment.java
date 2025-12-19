@@ -19,11 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
@@ -36,7 +31,6 @@ import java.util.Map;
 import io.focuslauncher.R;
 import io.focuslauncher.phone.app.CoreApplication;
 import io.focuslauncher.phone.models.UserModel;
-import io.focuslauncher.phone.service.MailChimpOperation;
 import io.focuslauncher.phone.service.StatusBarService;
 import io.focuslauncher.phone.utils.PrefSiempo;
 
@@ -95,7 +89,6 @@ public class TempoUpdateEmailFragment extends CoreFragment {
                                     .CONNECTIVITY_SERVICE);
                             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                             if (activeNetwork != null) {
-                                new MailChimpOperation(MailChimpOperation.EmailType.EMAIL_REG).execute(val_email);
                                 if (PrefSiempo.getInstance(context).read(PrefSiempo
                                         .USER_EMAILID, "").equalsIgnoreCase("")) {
                                     storeDataToFirebase(true, CoreApplication.getInstance().getDeviceId(), val_email);

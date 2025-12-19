@@ -17,8 +17,9 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        // ❌ Firebase classpaths supprimés (privacy-first)
+        // ❌ google-services:4.3.10 - SUPPRIMÉ
+        // ❌ firebase-crashlytics-gradle:2.7.1 - SUPPRIMÉ
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -43,7 +44,6 @@ project.ext {
     calligraphyVersion = "2.1.0@aar"
     eventbusVersion = "3.0.0-beta1"
     loggerVersion = "1.11"
-    crashlyticsVersion = "2.5.5@aar"
     baseRecyclerViewAdapterHelperVersion = "2.2.0"
     sugarOrmVersion = "1.5"
     greenDaoVersion = "3.2.0"

@@ -27,7 +27,6 @@ import android.util.ArrayMap;
 import android.util.Log;
 import android.util.LruCache;
 import com.androidnetworking.AndroidNetworking;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.joanzapata.iconify.Iconify;

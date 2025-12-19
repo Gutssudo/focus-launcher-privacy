@@ -46,7 +46,6 @@ import io.focuslauncher.phone.app.CoreApplication;
 import io.focuslauncher.phone.db.DBClient;
 import io.focuslauncher.phone.event.*;
 import io.focuslauncher.phone.helper.ActivityHelper;
-import io.focuslauncher.phone.helper.FirebaseHelper;
 import io.focuslauncher.phone.log.Tracer;
 import io.focuslauncher.phone.main.MainListItemLoader;
 import io.focuslauncher.phone.models.AppMenu;
@@ -440,8 +439,6 @@ public class StatusBarService extends Service {
     }
 
     @Subscribe
-    public void firebaseEvent(OnBackPressedEvent onBackPressed) {
-//        FirebaseHelper.getInstance().logScreenUsageTime(onBackPressed.getScreenName(), onBackPressed.getStrStartTime());
     }
 
     @Override
@@ -843,7 +840,6 @@ public class StatusBarService extends Service {
 
                 Log.d("DeterUse : Cover", "" + minutes + ":" + seconds);
                 PrefSiempo.getInstance(context).write(PrefSiempo.COVER_TIME, completedTime);
-                // store data in firebase how much time user spent with cover period.
                 long coverTimeSpent = PrefSiempo.getInstance(context).read(PrefSiempo.JUNKFOOD_USAGE_COVER_TIME, 0L);
                 Log.d("DeterUse : Cover", "coverTimeSpent " + coverTimeSpent);
                 Log.d("DeterUse : Cover", "completedTime " + completedTime);
@@ -901,7 +897,6 @@ public class StatusBarService extends Service {
                 int minutes = (int) (completedTime / (1000 * 60));
                 int seconds = (int) ((completedTime / 1000) % 60);
 
-                // store data in firebase how much time user spent with cover period.
                 long coverTimeSpent = PrefSiempo.getInstance(context).read(PrefSiempo.JUNKFOOD_USAGE_COVER_TIME, 0L);
                 PrefSiempo.getInstance(context).write(PrefSiempo.JUNKFOOD_USAGE_COVER_TIME, coverTimeSpent + completedTime);
 
@@ -3357,12 +3352,10 @@ public class StatusBarService extends Service {
                             long spentTimeWithCover = PrefSiempo.getInstance(context).read(PrefSiempo.JUNKFOOD_USAGE_COVER_TIME, 0L);
 
                             if (spentTime != 0) {
-                                FirebaseHelper.getInstance().logJunkFoodUsageTime(spentTime);
                                 PrefSiempo.getInstance(context).write(PrefSiempo.JUNKFOOD_USAGE_TIME, 0L);
                             }
 
                             if (spentTimeWithCover != 0) {
-                                FirebaseHelper.getInstance().logJunkFoodUsageTimeWithCover(spentTimeWithCover);
                                 PrefSiempo.getInstance(context).write(PrefSiempo.JUNKFOOD_USAGE_COVER_TIME, 0L);
                             }
 
@@ -3373,7 +3366,6 @@ public class StatusBarService extends Service {
                                 }
                                 for (Map.Entry<String, Long> entry : mapAsDefault.entrySet()) {
                                     Log.d("UsageTime", entry.getKey() + "/" + entry.getValue());
-                                    FirebaseHelper.getInstance().logTimeThirdPartyUsageAppAsLauncher(entry.getKey(), entry.getValue());
                                 }
                                 PrefSiempo.getInstance(context).read(PrefSiempo.THIRD_PARTY_APP_LOG_AS_LAUNCHER, "");
                             }
@@ -3389,7 +3381,6 @@ public class StatusBarService extends Service {
                             }
                             for (Map.Entry<String, Long> entry : mapNotDefault.entrySet()) {
                                 Log.d("UsageTime", entry.getKey() + "/" + entry.getValue());
-                                FirebaseHelper.getInstance().logTimeThirdPartyUsageAppNotAsLauncher(entry.getKey(), entry.getValue());
                             }
                             PrefSiempo.getInstance(context).read(PrefSiempo.THIRD_PARTY_APP_LOG_NOT_AS_LAUNCHER, "");
                         }

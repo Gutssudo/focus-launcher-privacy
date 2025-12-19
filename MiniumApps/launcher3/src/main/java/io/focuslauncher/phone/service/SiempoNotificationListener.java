@@ -48,7 +48,6 @@ import io.focuslauncher.phone.db.DaoSession;
 import io.focuslauncher.phone.db.TableNotificationSms;
 import io.focuslauncher.phone.db.TableNotificationSmsDao;
 import io.focuslauncher.phone.event.NewNotificationEvent;
-import io.focuslauncher.phone.helper.FirebaseHelper;
 import io.focuslauncher.phone.log.Tracer;
 import io.focuslauncher.phone.utils.NotificationUtility;
 import io.focuslauncher.phone.utils.NotificationUtils;
@@ -433,7 +432,6 @@ public class SiempoNotificationListener extends NotificationListenerService {
                 if (strCount != null && Character.isDigit(strCount.charAt(0))) {
                     String str[] = strCount.split(" ");
                     int count = Integer.parseInt(str[0]);
-                    logFirebaseCount(strPackageName, count);
                 }
 
             }
@@ -488,7 +486,6 @@ public class SiempoNotificationListener extends NotificationListenerService {
                             .where(TableNotificationSmsDao.Properties.PackageName.eq(strPackageName),
                                     TableNotificationSmsDao.Properties.Notification_type.eq(NotificationUtility.NOTIFICATION_TYPE_EVENT))
                             .list();
-                    logFirebaseCount(strPackageName, notificationSms.size());
                 }
             } catch (Exception e) {
                 CoreApplication.getInstance().logException(e);
@@ -723,7 +720,6 @@ public class SiempoNotificationListener extends NotificationListenerService {
             for (TableNotificationSms tableNotificationSms : notificationSms) {
                 count = count + tableNotificationSms.get_message().split("\n").length;
             }
-            logFirebaseCount(strPackageName, count);
         } catch (Exception e) {
             Tracer.d("SiempoNotificationListener:parseHangOutMessage" + e.getMessage());
             e.printStackTrace();
@@ -1211,15 +1207,12 @@ public class SiempoNotificationListener extends NotificationListenerService {
     }
 
     /**
-     * Send the suppressed notification count to firebase analytics.
      *
      * @param strPackageName
      * @param count
      */
-    private void logFirebaseCount(String strPackageName, int count) {
         try {
             Log.d("Count Suppressed", "PackageName:" + strPackageName + " " + count);
-            FirebaseHelper.getInstance().logSuppressedNotification(getAppName(strPackageName), count);
         } catch (Exception e) {
             e.printStackTrace();
             CoreApplication.getInstance().logException(e);

@@ -51,11 +51,6 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.OnFailureListener;
 import com.google.android.play.core.tasks.OnSuccessListener;
 import com.google.android.play.core.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.HashMap;
@@ -85,7 +80,6 @@ import io.focuslauncher.phone.service.ApiClient_;
 import io.focuslauncher.phone.service.LoadFavoritePane;
 import io.focuslauncher.phone.service.LoadJunkFoodPane;
 import io.focuslauncher.phone.service.LoadToolPane;
-import io.focuslauncher.phone.service.MailChimpOperation;
 import io.focuslauncher.phone.service.ScreenFilterService;
 import io.focuslauncher.phone.service.SiempoNotificationListener_;
 import io.focuslauncher.phone.service.StatusBarService;
@@ -165,7 +159,6 @@ public class DashboardActivity extends CoreActivity implements InstallStateUpdat
                         activeNetwork = connectivityManager.getActiveNetworkInfo();
                     }
                     if (activeNetwork != null) {
-                        new MailChimpOperation(MailChimpOperation.EmailType.EMAIL_REG).execute(strEmail);
                         storeDataToFirebase(CoreApplication.getInstance().getDeviceId(), strEmail);
                     }
                 } catch (Exception e) {

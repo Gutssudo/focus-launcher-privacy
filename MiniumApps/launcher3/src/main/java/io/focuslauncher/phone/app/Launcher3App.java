@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.evernote.client.android.EvernoteSession;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.androidannotations.annotations.EApplication;
 import org.androidannotations.annotations.SystemService;

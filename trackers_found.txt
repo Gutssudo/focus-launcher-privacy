@@ -1,0 +1,72 @@
+# TRACKERS TROUVÉS - Focus Launcher Privacy Audit
+Date: 2025-12-19
+
+## 🔴 FIREBASE (CRITIQUE - À SUPPRIMER)
+
+### Fichiers de configuration:
+- ./MiniumApps/launcher3/google-services.json
+
+### Dépendances dans build.gradle:
+- launcher3/build.gradle:
+  * apply plugin: 'com.google.firebase.crashlytics'
+  * firebase-core:12.0.0
+  * firebase-database:12.0.0
+  * firebase-crashlytics:18.2.1
+  * firebase-analytics:19.0.1
+  * firebase-config-ktx:20.0.4 (2 fois)
+  * firebase-messaging:21.1.0
+
+- build.gradle (project):
+  * com.google.firebase:firebase-crashlytics-gradle:2.7.1
+
+### Utilisation dans le code:
+- MainListItemLoader.java: 20+ appels à FirebaseHelper.getInstance().logSiempoMenuUsage()
+  * Tracking de l'utilisation du menu (Map, Transport, Calendar, Weather, etc.)
+
+### Classes à identifier:
+- FirebaseHelper.java (import présent mais fichier non trouvé dans les premiers résultats)
+
+## 🔴 MAILCHIMP (CRITIQUE - À SUPPRIMER)
+
+### Fichiers:
+- ./MiniumApps/launcher3/src/main/java/io/focuslauncher/phone/service/MailChimpOperation.java
+
+### Utilisation:
+- DashboardActivity.java: Collection d'email utilisateur
+  * new MailChimpOperation(MailChimpOperation.EmailType.EMAIL_REG).execute(strEmail)
+
+- TempoUpdateEmailFragment.java: Collection d'email utilisateur
+  * new MailChimpOperation(MailChimpOperation.EmailType.EMAIL_REG).execute(val_email)
+
+### API Endpoint détecté:
+- https://us14.api.mailchimp.com/3.0/lists/08cf9f0fe2/members/
+
+## 🔴 SENDMAIL.JAR (CRITIQUE - À SUPPRIMER)
+
+### Fichiers JAR:
+- ./MiniumApps/launcher3/libs/mail.jar
+- ./MiniumApps/launcher3/libs/activation.jar
+
+### Classes Java:
+- ./MiniumApps/launcher3/src/main/java/io/focuslauncher/phone/utils/SendMail.java
+
+## ✅ SENTRY (NON DÉTECTÉ)
+Aucune trace de Sentry trouvée - Bon signe !
+
+## 📊 RÉSUMÉ
+
+Total de trackers trouvés: 3 types (Firebase, MailChimp, SendMail)
+Fichiers à supprimer: ~6+ fichiers
+Code à nettoyer: ~3+ fichiers Java
+Dépendances à retirer: ~8 dépendances Firebase + classpath
+
+## 🎯 PROCHAINES ÉTAPES
+
+1. Trouver et analyser FirebaseHelper.java
+2. Supprimer google-services.json
+3. Retirer toutes dépendances Firebase des build.gradle
+4. Supprimer imports et appels Firebase dans MainListItemLoader.java
+5. Supprimer MailChimpOperation.java et ses utilisations
+6. Supprimer SendMail.java et les JARs
+7. Créer EmailUtils.java pour remplacement
+8. Compiler et tester
