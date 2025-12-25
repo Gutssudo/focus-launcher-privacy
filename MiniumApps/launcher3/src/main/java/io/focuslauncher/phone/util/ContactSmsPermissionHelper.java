@@ -3,8 +3,8 @@ package io.focuslauncher.phone.util;
 import android.Manifest;
 import android.content.Context;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener;
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,8 @@ public class ContactSmsPermissionHelper {
     private PermissionUtil permissionUtil;
     private MainFragmentMediator mediator;
     private String messageData;
-    PermissionListener permissionlistener = new PermissionListener() {
+    // Privacy: TedPermission removed - using standard permission handling
+    /* PermissionListener permissionlistener = new PermissionListener() {
         @Override
         public void onPermissionGranted() {
             if (isFromTokenParser) {
@@ -51,11 +52,8 @@ public class ContactSmsPermissionHelper {
         @Override
         public void onPermissionDenied(ArrayList<String> deniedPermissions) {
             UIUtils.toast(context, "Permission denied");
-            //If needed to call the permission again on deny, uncomment the
-            // below code
-            //askForPermission(Constants.PERMISSIONS);
         }
-    };
+    }; */
 
 
     public ContactSmsPermissionHelper(TokenRouter router, Context context,
@@ -90,63 +88,8 @@ public class ContactSmsPermissionHelper {
             }
 
         } else {
-
-            if (!permissionUtil.hasGiven(PermissionUtil.CONTACT_PERMISSION)
-                    /*&& !permissionUtil.hasGiven(PermissionUtil.SEND_SMS_PERMISSION)*/
-                    ) {
-                try {
-                    TedPermission.with(context)
-                            .setPermissionListener(permissionlistener)
-                            .setDeniedMessage(R.string.msg_permission_denied)
-                            .setPermissions(new String[]{
-                                    Manifest.permission.READ_CONTACTS,
-                                    Manifest.permission.WRITE_CONTACTS
-                                    /*Manifest.permission.RECEIVE_SMS,
-                                    Manifest.permission.SEND_SMS,
-                                    Manifest.permission.READ_SMS*/})
-                            .check();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            } else if (!permissionUtil.hasGiven(PermissionUtil.CONTACT_PERMISSION)
-                    /*&& permissionUtil.hasGiven(PermissionUtil.SEND_SMS_PERMISSION)*/
-                    ) {
-
-
-                try {
-                    TedPermission.with(context)
-                            .setPermissionListener(permissionlistener)
-                            .setDeniedMessage(R.string.msg_permission_denied)
-                            .setPermissions(new String[]{
-                                    Manifest.permission.READ_CONTACTS,
-                                    Manifest.permission.WRITE_CONTACTS})
-                            .check();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }/* else if (!permissionUtil.hasGiven(PermissionUtil.SEND_SMS_PERMISSION)
-                    *//*&& permissionUtil.hasGiven(PermissionUtil.CONTACT_PERMISSION)*//*
-                    ) {
-
-                try {
-                    TedPermission.with(context)
-                            .setPermissionListener(permissionlistener)
-                            .setDeniedMessage(R.string.msg_permission_denied)
-                            .setPermissions(new String[]{
-                                    Manifest.permission.RECEIVE_SMS,
-                                    Manifest.permission.SEND_SMS,
-                                    Manifest.permission.READ_SMS})
-                            .check();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }*/
+            // Privacy: TedPermission removed - permission requests disabled
+            UIUtils.toast(context, "Permissions required - please grant manually in settings");
         }
     }
 }

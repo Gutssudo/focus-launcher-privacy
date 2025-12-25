@@ -17,8 +17,8 @@ import android.widget.Switch;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener;
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.CheckedChange;
@@ -83,19 +83,19 @@ public class SiempoPermissionActivity extends CoreActivity {
     TableRow tblStorage;
     @ViewById
     TableRow tblControlAccessUsage;
-    PermissionListener permissionlistener = new PermissionListener() {
-        @Override
-        public void onPermissionGranted() {
-            Log.d("TAG", "Permission granted");
-
-        }
-
-        @Override
-        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-            UIUtils.toast(SiempoPermissionActivity.this, "Permission denied");
-            askForPermission(PERMISSIONS);
-        }
-    };
+    // Privacy: TedPermission removed - permission listener stubbed out
+    // PermissionListener permissionlistener = new PermissionListener() {
+    //     @Override
+    //     public void onPermissionGranted() {
+    //         Log.d("TAG", "Permission granted");
+    //     }
+    //
+    //     @Override
+    //     public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+    //         UIUtils.toast(SiempoPermissionActivity.this, "Permission denied");
+    //         askForPermission(PERMISSIONS);
+    //     }
+    // };
     CompoundButton.OnClickListener onClickListener = new CompoundButton.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -129,16 +129,16 @@ public class SiempoPermissionActivity extends CoreActivity {
     private ProgressDialog pd;
 
     private void askForPermission(String[] PERMISSIONS) {
-        try {
-            TedPermission.with(SiempoPermissionActivity.this)
-                    .setPermissionListener(permissionlistener)
-                    .setDeniedMessage(R.string.msg_permission_denied)
-                    .setPermissions(PERMISSIONS)
-                    .check();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        // Privacy: TedPermission removed - method stubbed out
+        // try {
+        //     TedPermission.with(SiempoPermissionActivity.this)
+        //             .setPermissionListener(permissionlistener)
+        //             .setDeniedMessage(R.string.msg_permission_denied)
+        //             .setPermissions(PERMISSIONS)
+        //             .check();
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     @AfterViews

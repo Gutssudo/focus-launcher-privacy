@@ -1,7 +1,7 @@
 package io.focuslauncher.phone.activities
 
 import android.widget.AbsListView.MultiChoiceModeListener
-import com.evernote.client.android.login.EvernoteLoginFragment
+// Removed for privacy: import com.evernote.client.android.login.EvernoteLoginFragment
 import io.focuslauncher.phone.adapters.NoteAdapter
 import org.json.JSONObject
 import org.json.JSONException
@@ -13,7 +13,7 @@ import android.content.pm.ActivityInfo
 import io.focuslauncher.R
 import android.content.Intent
 import androidx.core.view.MenuItemCompat
-import com.evernote.client.android.EvernoteSession
+// Removed for privacy: import com.evernote.client.android.EvernoteSession
 import io.focuslauncher.phone.managers.EvernoteManager
 import android.app.AlertDialog
 import android.content.Context
@@ -34,7 +34,7 @@ import java.lang.Exception
 import java.util.ArrayList
 
 class NoteListActivity : CoreActivity(), AdapterView.OnItemClickListener, Toolbar.OnMenuItemClickListener,
-    MultiChoiceModeListener, SearchView.OnQueryTextListener, EvernoteLoginFragment.ResultCallback {
+    MultiChoiceModeListener, SearchView.OnQueryTextListener {
 
     private var binding: ActivityMainNotesBinding? by lifecycleProperty()
 
@@ -446,11 +446,8 @@ class NoteListActivity : CoreActivity(), AdapterView.OnItemClickListener, Toolba
             return true
         }
         if (id == R.id.action_evernote) {
-            if (EvernoteSession.getInstance().isLoggedIn) {
-                EvernoteManager().sync()
-            } else {
-                EvernoteSession.getInstance().authenticate(this)
-            }
+            // Privacy: Evernote integration removed
+            Toast.makeText(this, "Evernote integration removed for privacy", Toast.LENGTH_SHORT).show()
             return true
         }
 
@@ -703,13 +700,7 @@ class NoteListActivity : CoreActivity(), AdapterView.OnItemClickListener, Toolba
         super.onConfigurationChanged(newConfig)
     }
 
-    override fun onLoginFinished(successful: Boolean) {
-        if (successful) {
-            EvernoteManager().createSiempoNotebook()
-            EvernoteManager().listNoteBooks("")
-            //new EvernoteManager().listNoteBooks(this);
-        }
-    }
+    // Privacy: Evernote integration removed - onLoginFinished method no longer needed
 
     override fun onPause() {
         super.onPause()

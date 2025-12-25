@@ -18,12 +18,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
+// Removed for privacy: import com.google.firebase.database.DataSnapshot
+// Removed for privacy: import com.google.firebase.database.DatabaseError
+// Removed for privacy: import com.google.firebase.database.FirebaseDatabase
+// Removed for privacy: import com.google.firebase.database.ValueEventListener
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission
 import com.joanzapata.iconify.IconDrawable
 import de.greenrobot.event.EventBus
 import de.greenrobot.event.Subscribe
@@ -203,26 +203,29 @@ open class AlphaSettingsActivity : CoreActivity() {
     private fun checkPermissionAndFindLocation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissionUtil?.hasGiven(PermissionUtil.LOCATION_PERMISSION) == false) {
             try {
-                TedPermission.with(this)
-                    .setPermissionListener(object : PermissionListener {
-                        override fun onPermissionGranted() {
-                            showLocation()
-                        }
-
-                        override fun onPermissionDenied(deniedPermissions: ArrayList<String>) {}
-                    })
-                    .setDeniedMessage(R.string.msg_permission_denied)
-                    .setPermissions(
+                // Privacy: Removed TedPermission dependency - use standard Android permission request
+                requestPermissions(
+                    arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.INTERNET
-                    )
-                    .check()
+                    ),
+                    REQUEST_LOCATION_PERMISSION
+                )
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         } else {
             showLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                showLocation()
+            }
         }
     }
 
@@ -275,7 +278,7 @@ open class AlphaSettingsActivity : CoreActivity() {
             binding?.latitude?.text = "latitude: " + (event?.latitude ?: "")
             val userEmail = PrefSiempo.getInstance(this).read(PrefSiempo.USER_EMAILID, "")
             if (event != null) {
-                storeDataToFirebase(CoreApplication.getInstance().deviceId, userEmail, event.latitude, event.longitude)
+                storeDataToFirebase(CoreApplication.getInstance().getAndroidDeviceId(), userEmail, event.latitude, event.longitude)
             }
             binding?.switchLocation?.isChecked = true
             binding?.longitude?.visibility = View.VISIBLE
@@ -285,38 +288,8 @@ open class AlphaSettingsActivity : CoreActivity() {
     }
 
     private fun storeDataToFirebase(userId: String, emailId: String, latitude: Double, longitude: Double) {
-        try {
-            val mDatabase = FirebaseDatabase.getInstance().getReference("users")
-            val user = UserModel(userId, emailId, latitude, longitude)
-            val key = mDatabase.child(userId).key
-            if (key != null) {
-                val map: MutableMap<String, Any> = HashMap()
-                map["emailId"] = emailId
-                map["userId"] = userId
-                map["latitude"] = latitude
-                map["longitude"] = longitude
-                mDatabase.child(userId).updateChildren(map)
-            } else {
-                mDatabase.child(userId).setValue(user)
-                mDatabase.child(userId).addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        Log.d(
-                            "Firebase", dataSnapshot.key + "  " + dataSnapshot.getValue(
-                                UserModel::class.java
-                            )
-                                .toString()
-                        )
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.w("Firebase RealTime", "Failed to read value.", error.toException())
-                    }
-                })
-            }
-            Log.d("Key", mDatabase.child(userId).key)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        // Privacy: Firebase removed - location data is not stored remotely
+        // Location coordinates are displayed locally only
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -341,6 +314,7 @@ open class AlphaSettingsActivity : CoreActivity() {
 
     companion object {
         private const val REQUEST_CHECK_SETTINGS = 0x1
+        private const val REQUEST_LOCATION_PERMISSION = 0x2
         private const val BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED"
     }
 }

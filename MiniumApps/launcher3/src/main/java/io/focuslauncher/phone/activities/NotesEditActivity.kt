@@ -111,7 +111,7 @@ class NotesEditActivity : CoreActivity(), Toolbar.OnMenuItemClickListener {
     protected fun initToolbar() = binding?.toolbarEdit?.toolbar?.apply {
         title = ""
         // Set a 'Back' navigation icon in the Toolbar and handle the click
-        setNavigationIcon(R.drawable.abc_ic_ab_back_material)
+        setNavigationIcon(R.drawable.ic_arrow_back_blue_24dp)
         setNavigationOnClickListener { onBackPressed() }
 
         // Inflate menu_edit to be displayed in the toolbar
