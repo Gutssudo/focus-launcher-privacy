@@ -10,8 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.evernote.client.android.EvernoteSession;
-import com.google.firebase.analytics.FirebaseAnalytics;
+// Removed for privacy: import com.evernote.client.android.EvernoteSession;
+// Removed for privacy: import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.androidannotations.annotations.EApplication;
 import org.androidannotations.annotations.SystemService;
@@ -22,7 +22,7 @@ import io.focuslauncher.BuildConfig;
 import io.focuslauncher.phone.db.DaoMaster;
 import io.focuslauncher.phone.db.DaoSession;
 import io.focuslauncher.phone.db.GreenDaoOpenHelper;
-import io.focuslauncher.phone.helper.FirebaseHelper;
+// Removed for privacy: import io.focuslauncher.phone.helper.FirebaseHelper;
 import io.focuslauncher.phone.log.LogConfig;
 import io.focuslauncher.phone.log.Tracer;
 import io.focuslauncher.phone.utils.PackageUtil;
@@ -45,7 +45,7 @@ public class Launcher3App extends CoreApplication {
     @SystemService
     NotificationManager notificationManager;
     private DaoSession daoSession;
-    private FirebaseAnalytics mFirebaseAnalytics;
+    // Removed for privacy: private FirebaseAnalytics mFirebaseAnalytics;
     private boolean isSiempoLauncher = false;
     private long startTime;
     private ResolveInfo resolveInfo;
@@ -71,9 +71,9 @@ public class Launcher3App extends CoreApplication {
                 + " || Manufacturer: " + Build.MANUFACTURER);
 
         loadConfigurationValues();
-        configureEverNote();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setUserId(getDeviceId());
+        // Removed for privacy: configureEverNote();
+        // Removed for privacy: mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // Removed for privacy: mFirebaseAnalytics.setUserId(getDeviceId());
         GreenDaoOpenHelper helper2 = new GreenDaoOpenHelper(this, "noti-db", null);
         Database db = helper2.getWritableDb();
         DaoMaster daoMaster = new DaoMaster(db);
@@ -111,19 +111,8 @@ public class Launcher3App extends CoreApplication {
         }
     }
 
-    private void configureEverNote() {
-        new EvernoteSession.Builder(this)
-                .setEvernoteService(EverNoteConfig.EVERNOTE_SERVICE)
-                .setSupportAppLinkedNotebooks(true)
-                .setForceAuthenticationInThirdPartyApp(true)
-                .build(EverNoteConfig.CONSUMER_KEY, EverNoteConfig.CONSUMER_SECRET)
-                .asSingleton();
-
-    }
-
-    public FirebaseAnalytics getFirebaseAnalytics() {
-        return mFirebaseAnalytics;
-    }
+    // Removed for privacy: configureEverNote()
+    // Removed for privacy: getFirebaseAnalytics()
 
     class AppLifecycleTracker implements Application.ActivityLifecycleCallbacks {
 
@@ -152,7 +141,7 @@ public class Launcher3App extends CoreApplication {
                 isSiempoLauncher = true;
                 if (startTime == 0) {
                     startTime = System.currentTimeMillis();
-                    FirebaseHelper.getInstance().logSiempoAsDefault("On", 0);
+                    // Removed for privacy: FirebaseHelper.getInstance().logSiempoAsDefault("On", 0);
                 }
             } else {
                 isSiempoLauncher = false;
@@ -165,7 +154,7 @@ public class Launcher3App extends CoreApplication {
                 isSiempoLauncher = true;
             } else {
                 if (isSiempoLauncher && startTime != 0) {
-                    FirebaseHelper.getInstance().logSiempoAsDefault("Off", startTime);
+                    // Removed for privacy: FirebaseHelper.getInstance().logSiempoAsDefault("Off", startTime);
                     startTime = 0;
                 }
                 isSiempoLauncher = false;
