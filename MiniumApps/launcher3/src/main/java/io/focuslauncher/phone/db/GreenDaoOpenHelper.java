@@ -8,7 +8,7 @@ import com.github.yuweiguocn.library.greendao.MigrationHelper;
 
 public class GreenDaoOpenHelper extends io.focuslauncher.phone.db.DaoMaster.OpenHelper {
     public GreenDaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
-        super(context, name, factory);
+        super(context, name);  // DaoMaster.OpenHelper doesn't use CursorFactory
     }
 
     @Override

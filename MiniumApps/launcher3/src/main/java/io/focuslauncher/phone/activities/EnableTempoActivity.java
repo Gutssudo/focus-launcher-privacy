@@ -14,8 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener;
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 
@@ -109,26 +109,28 @@ public class EnableTempoActivity extends CoreActivity {
     }
 
     private void askForPermission(String[] PERMISSIONS) {
-        try {
-            TedPermission.with(EnableTempoActivity.this)
-                    .setPermissionListener(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted() {
-                            bindUi();
-                        }
-
-                        @Override
-                        public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-
-                        }
-                    })
-                    .setDeniedMessage(R.string.msg_permission_denied1)
-                    .setPermissions(PERMISSIONS)
-                    .check();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        // Privacy: TedPermission removed - method stubbed out
+        // Automatically call bindUi() since we can't use TedPermission
+        bindUi();
+        // try {
+        //     TedPermission.with(EnableTempoActivity.this)
+        //             .setPermissionListener(new PermissionListener() {
+        //                 @Override
+        //                 public void onPermissionGranted() {
+        //                     bindUi();
+        //                 }
+        //
+        //                 @Override
+        //                 public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+        //
+        //                 }
+        //             })
+        //             .setDeniedMessage(R.string.msg_permission_denied1)
+        //             .setPermissions(PERMISSIONS)
+        //             .check();
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     @Override

@@ -19,11 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+// Removed for privacy: import com.google.firebase.database.DataSnapshot;
+// Removed for privacy: import com.google.firebase.database.DatabaseError;
+// Removed for privacy: import com.google.firebase.database.DatabaseReference;
+// Removed for privacy: import com.google.firebase.database.FirebaseDatabase;
+// Removed for privacy: import com.google.firebase.database.ValueEventListener;
 
 import org.androidannotations.annotations.AfterTextChange;
 import org.androidannotations.annotations.AfterViews;
@@ -98,9 +98,9 @@ public class TempoUpdateEmailFragment extends CoreFragment {
                                 new MailChimpOperation(MailChimpOperation.EmailType.EMAIL_REG).execute(val_email);
                                 if (PrefSiempo.getInstance(context).read(PrefSiempo
                                         .USER_EMAILID, "").equalsIgnoreCase("")) {
-                                    storeDataToFirebase(true, CoreApplication.getInstance().getDeviceId(), val_email);
+                                    storeDataToFirebase(true, CoreApplication.getInstance().getAndroidDeviceId(), val_email);
                                 } else {
-                                    storeDataToFirebase(false, CoreApplication.getInstance().getDeviceId(), val_email);
+                                    storeDataToFirebase(false, CoreApplication.getInstance().getAndroidDeviceId(), val_email);
                                 }
                             }
                         } catch (Exception e) {
@@ -162,36 +162,36 @@ public class TempoUpdateEmailFragment extends CoreFragment {
     }
 
     private void storeDataToFirebase(boolean isNew, String userId, String emailId) {
-        try {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-            UserModel user = new UserModel(userId, emailId, StatusBarService.latitude, StatusBarService.longitude);
-            String key = mDatabase.child(userId).getKey();
-            if (key != null) {
-                Map map = new HashMap();
-                map.put("emailId",emailId);
-                map.put("userId",userId);
-                map.put("latitude", StatusBarService.latitude);
-                map.put("longitude", StatusBarService.longitude);
-                mDatabase.child(userId).updateChildren(map);
-            } else {
-                mDatabase.child(userId).setValue(user);
-                mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d("Firebase", dataSnapshot.getKey() + "  " + dataSnapshot.getValue(UserModel.class)
-                                .toString());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.w("Firebase RealTime", "Failed to read value.", error.toException());
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        // Privacy: Firebase Database removed - method stubbed out
+        // try {
+        //     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        //     UserModel user = new UserModel(userId, emailId, StatusBarService.latitude, StatusBarService.longitude);
+        //     String key = mDatabase.child(userId).getKey();
+        //     if (key != null) {
+        //         Map map = new HashMap();
+        //         map.put("emailId",emailId);
+        //         map.put("userId",userId);
+        //         map.put("latitude", StatusBarService.latitude);
+        //         map.put("longitude", StatusBarService.longitude);
+        //         mDatabase.child(userId).updateChildren(map);
+        //     } else {
+        //         mDatabase.child(userId).setValue(user);
+        //         mDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+        //             @Override
+        //             public void onDataChange(DataSnapshot dataSnapshot) {
+        //                 Log.d("Firebase", dataSnapshot.getKey() + "  " + dataSnapshot.getValue(UserModel.class)
+        //                         .toString());
+        //             }
+        //
+        //             @Override
+        //             public void onCancelled(DatabaseError error) {
+        //                 Log.w("Firebase RealTime", "Failed to read value.", error.toException());
+        //             }
+        //         });
+        //     }
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
     }
 
     @AfterTextChange

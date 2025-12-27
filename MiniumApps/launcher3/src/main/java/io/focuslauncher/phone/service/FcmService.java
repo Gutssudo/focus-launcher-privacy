@@ -1,19 +1,26 @@
 package io.focuslauncher.phone.service;
 
-import androidx.annotation.NonNull;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import androidx.annotation.Nullable;
 
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
+/**
+ * Privacy-focused stub for Firebase Cloud Messaging Service.
+ * Firebase has been removed for privacy - this is a no-op service.
+ */
+public class FcmService extends Service {
 
-public class FcmService extends FirebaseMessagingService{
-
+    @Nullable
     @Override
-    public void onNewToken(@NonNull String s) {
-        super.onNewToken(s);
+    public IBinder onBind(Intent intent) {
+        // No-op: Firebase removed for privacy
+        return null;
     }
 
     @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // No-op: Firebase removed for privacy
+        return START_NOT_STICKY;
     }
 }

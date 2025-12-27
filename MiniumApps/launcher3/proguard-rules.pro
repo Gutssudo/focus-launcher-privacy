@@ -52,3 +52,8 @@
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 
+# Kotlinx Coroutines - ignore missing Java instrumentation classes
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn java.lang.instrument.Instrumentation
+-dontwarn sun.misc.Signal
+-dontwarn sun.misc.SignalHandler

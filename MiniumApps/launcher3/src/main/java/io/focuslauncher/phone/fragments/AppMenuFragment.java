@@ -43,7 +43,8 @@ import io.focuslauncher.phone.utils.PrefSiempo;
 import io.focuslauncher.phone.utils.UIUtils;
 import de.greenrobot.event.EventBus;
 
-import static com.rvalerio.fgchecker.Utils.hasUsageStatsPermission;
+// Removed fgchecker dependency for privacy
+// import static com.rvalerio.fgchecker.Utils.hasUsageStatsPermission;
 
 
 public class AppMenuFragment extends CoreFragment implements View.OnClickListener {
@@ -157,7 +158,7 @@ public class AppMenuFragment extends CoreFragment implements View.OnClickListene
 
         switchOveruseFlagged = view.findViewById(R.id.switchOveruseFlagged);
         if (index == -1
-                || !hasUsageStatsPermission(getActivity())
+                || !UIUtils.hasUsageStatsPermission(getActivity())
                 || !hasDrawOverlayPermission()) {
             switchOveruseFlagged.setChecked(false);
         } else {
@@ -251,7 +252,7 @@ public class AppMenuFragment extends CoreFragment implements View.OnClickListene
     }
 
     void requestUsageStatsPermission() {
-        if (!hasUsageStatsPermission(getActivity())) {
+        if (!UIUtils.hasUsageStatsPermission(getActivity())) {
             startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), 100);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

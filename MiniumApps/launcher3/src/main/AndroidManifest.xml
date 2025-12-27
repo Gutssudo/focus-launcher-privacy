@@ -94,7 +94,9 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
 
-        <service android:name=".phone.service.FcmService">
+        <!-- Firebase removed for privacy - service kept as stub -->
+        <service android:name=".phone.service.FcmService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -110,6 +112,7 @@
         <activity
             android:name="io.focuslauncher.phone.launcher.FakeLauncherActivity"
             android:enabled="false"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialogTheme">
             <intent-filter>
@@ -122,6 +125,7 @@
 
         <service
             android:name="io.focuslauncher.phone.service.SiempoNotificationListener_"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -131,7 +135,8 @@
 
         <receiver
             android:name="io.focuslauncher.phone.receivers.CallReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -180,7 +185,8 @@
             android:name="io.focuslauncher.phone.activities.IntentionEditActivity"
             android:windowSoftInputMode="stateAlwaysVisible" />
 
-        <receiver android:name="io.focuslauncher.phone.service.AlarmBroadcast">
+        <receiver android:name="io.focuslauncher.phone.service.AlarmBroadcast"
+            android:exported="true">
             <intent-filter>
                 <action android:name="co.siempo.phone.ACTION_ALARM" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -199,7 +205,8 @@
             android:enabled="true" >
         </service>
 
-        <receiver android:name="io.focuslauncher.phone.receivers.BootReceiver">
+        <receiver android:name="io.focuslauncher.phone.receivers.BootReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -211,6 +218,7 @@
             android:configChanges="keyboard|keyboardHidden|navigation"
             android:enabled="true"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:resumeWhilePausing="true"
@@ -261,6 +269,7 @@
         <receiver
             android:name="io.focuslauncher.phone.receivers.ScreenOffAdminReceiver"
             android:description="@string/device_admin_description"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data

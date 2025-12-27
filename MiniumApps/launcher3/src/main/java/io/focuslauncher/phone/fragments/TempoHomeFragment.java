@@ -16,8 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener;
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -265,34 +265,11 @@ public class TempoHomeFragment extends CoreFragment {
     }
 
     private void checkPermissionsForSystemWindow() {
+        // Privacy: TedPermission removed - simplified permission check
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionUtil.hasGiven
                 (PermissionUtil.SYSTEM_WINDOW_ALERT))) {
-            try {
-                TedPermission.with(getActivity())
-                        .setPermissionListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted() {
-                                PrefSiempo.getInstance(getActivity()).write(PrefSiempo.DEFAULT_SCREEN_OVERLAY, true);
-                                Intent command = new Intent(getActivity(), ScreenFilterService.class);
-                                command.putExtra(ScreenFilterService.BUNDLE_KEY_COMMAND, 0);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                                    getActivity().startForegroundService(command);
-                                else
-                                    getActivity().startService(command);
-                            }
-
-                            @Override
-                            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-
-                            }
-                        })
-                        .setDeniedMessage(R.string.msg_permission_denied)
-                        .setPermissions(new String[]{
-                                Manifest.permission.SYSTEM_ALERT_WINDOW})
-                        .check();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // Permission not granted - user needs to grant manually
+            // No action taken since we can't use TedPermission
         } else {
             PrefSiempo.getInstance(getActivity()).write(PrefSiempo.DEFAULT_SCREEN_OVERLAY, true);
             Intent command = new Intent(getActivity(), ScreenFilterService.class);
@@ -334,34 +311,11 @@ public class TempoHomeFragment extends CoreFragment {
     }
 
     private void checkPermissionsForBackground() {
+        // Privacy: TedPermission removed - simplified permission check
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionUtil.hasGiven
                 (PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSION))) {
-            try {
-                TedPermission.with(getActivity())
-                        .setPermissionListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted() {
-                                CoreApplication.getInstance().downloadSiempoImages();
-                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                intent.setType("image/*");
-                                startActivityForResult(intent, 10);
-                            }
-
-                            @Override
-                            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-
-                            }
-                        })
-                        .setDeniedMessage(R.string.msg_permission_denied)
-                        .setPermissions(new String[]{
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest
-                                        .permission
-                                        .READ_EXTERNAL_STORAGE})
-                        .check();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // Permission not granted - user needs to grant manually
+            // No action taken since we can't use TedPermission
         } else {
             CoreApplication.getInstance().downloadSiempoImages();
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

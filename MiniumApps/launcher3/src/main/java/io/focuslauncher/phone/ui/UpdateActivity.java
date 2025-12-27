@@ -34,7 +34,7 @@ public class UpdateActivity extends CoreActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setGeolocationEnabled(true);
-        webSettings.setAppCacheEnabled(true);
+        // Deprecated and removed in newer Android versions: webSettings.setAppCacheEnabled(true);
         webSettings.setSupportZoom(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
