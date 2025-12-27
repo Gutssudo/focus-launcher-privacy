@@ -91,10 +91,10 @@ public class AccountSettingFragment extends CoreFragment {
                 if (isChecked) {
                     PrefSiempo.getInstance(context).write(PrefSiempo
                             .IS_FIREBASE_ANALYTICS_ENABLE, true);
-                    FirebaseHelper.getInstance().getFirebaseAnalytics().setAnalyticsCollectionEnabled(true);
+// Privacy: Firebase Analytics removed -                     FirebaseHelper.getInstance().getFirebaseAnalytics().setAnalyticsCollectionEnabled(true);
                 } else {
 
-                    FirebaseHelper.getInstance().getFirebaseAnalytics().setAnalyticsCollectionEnabled(false);
+// Privacy: Firebase Analytics removed -                     FirebaseHelper.getInstance().getFirebaseAnalytics().setAnalyticsCollectionEnabled(false);
                     PrefSiempo.getInstance(context).write(PrefSiempo
                             .IS_FIREBASE_ANALYTICS_ENABLE, false);
                 }

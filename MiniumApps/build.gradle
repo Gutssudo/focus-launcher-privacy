@@ -1,24 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.9.22'
     repositories {
-        mavenCentral()
-        jcenter()
         google()
+        mavenCentral()
         // NOTE: Global repositories should be placed here
-
-        // Fabric
-        maven { url 'https://maven.fabric.io/public' }
-        maven { url 'https://dl.bintray.com/rvalerio/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        classpath 'com.android.tools.build:gradle:8.2.2'
+        // android-apt and retrolambda are obsolete with modern AGP
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        // GreenDAO plugin disabled - using manually created DAO files for Gradle 8.x compatibility
+        // classpath "org.greenrobot:greendao-gradle-plugin:3.3.0"
+        // Removed Firebase dependencies for privacy
+        // classpath 'com.google.gms:google-services:4.3.10'
+        // classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -26,15 +22,17 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter()
+        // Temporarily re-enabled jcenter in read-only mode for legacy dependencies
+        // TODO: Migrate all dependencies away from jcenter
+        maven { url "https://jcenter.bintray.com" }
     }
 }
 project.ext {
 
     minSdkVersion = 21  // Targeting lollipop
-    targetSdkVersion = 26
-    compileSdkVersion = 30
-    buildToolsVersion = "30.0.3"
+    targetSdkVersion = 34  // Android 14
+    compileSdkVersion = 34  // Android 14
+    buildToolsVersion = "34.0.0"
 
 
     supportVersion = "26.1.0"
@@ -46,7 +44,7 @@ project.ext {
     crashlyticsVersion = "2.5.5@aar"
     baseRecyclerViewAdapterHelperVersion = "2.2.0"
     sugarOrmVersion = "1.5"
-    greenDaoVersion = "3.2.0"
+    greenDaoVersion = "3.3.0"
     tedPermissionVersion = "2.2.0"
     fastAndroidNetworkingVersion = "0.3.0"
     espressoVersion = "2.2.2"

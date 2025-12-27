@@ -26,8 +26,8 @@ import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.util.LruCache;
-import com.androidnetworking.AndroidNetworking;
-import com.google.firebase.analytics.FirebaseAnalytics;
+// Removed for privacy: import com.androidnetworking.AndroidNetworking;
+// Removed for privacy: import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.joanzapata.iconify.Iconify;
@@ -229,7 +229,7 @@ public abstract class CoreApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        FirebaseAnalytics.getInstance(this);
+        // Removed for privacy: FirebaseAnalytics.getInstance(this);
         userManager = (UserManager) getSystemService(Context.USER_SERVICE);
         launcherApps = (LauncherApps) getSystemService(Context.LAUNCHER_APPS_SERVICE);
         sInstance = this;
@@ -247,7 +247,7 @@ public abstract class CoreApplication extends MultiDexApplication {
     }
 
     @SuppressLint("HardwareIds")
-    public String getDeviceId() {
+    public String getAndroidDeviceId() {
         String strDeviceId = "";
         try {
             strDeviceId = Settings.Secure.getString(getContentResolver(),
@@ -567,7 +567,7 @@ public abstract class CoreApplication extends MultiDexApplication {
     }
 
     private void configureNetworking() {
-        AndroidNetworking.initialize(getApplicationContext());
+        // Removed for privacy: AndroidNetworking.initialize(getApplicationContext());
     }
 
     private void configureLifecycle() {

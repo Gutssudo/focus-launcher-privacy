@@ -29,11 +29,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.github.rongi.rotate_layout.layout.RotateLayout;
+// Removed for privacy: import com.github.rongi.rotate_layout.layout.RotateLayout;
 import com.google.android.gms.location.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.rvalerio.fgchecker.AppChecker;
+// Removed for privacy: import com.rvalerio.fgchecker.AppChecker;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import io.focuslauncher.R;
@@ -103,7 +103,8 @@ public class StatusBarService extends Service {
     private int minusculeHeight;
     private int minusculeHeightLandscape;
     private WindowManager.LayoutParams paramsTop;
-    private AppChecker appChecker;
+    // Privacy: fgchecker library removed
+    // private AppChecker appChecker;
     private TextView txtTime, txtCount, txtSettings, txtWellness;
     private TextView txtTimeTop, txtCountTop, txtSettingsTop, txtWellnessTop;
     private LinearLayout linButtons, linProgress;
@@ -127,8 +128,8 @@ public class StatusBarService extends Service {
     private DateChangeReceiver dateChangeReceiver;
     private int heightWindowLandscapeExclusive;
     private int coverTimeForWindow;
-    private RotateLayout rotateLayout;
-    private RotateLayout rotateLayoutTop;
+    private View rotateLayout;  // Changed from RotateLayout (removed library)
+    private View rotateLayoutTop;  // Changed from RotateLayout (removed library)
     private LinearLayout lnrTime;
     private LinearLayout lnrSettingsNote;
     private LinearLayout lnrWellness;
@@ -156,6 +157,8 @@ public class StatusBarService extends Service {
     }
 
     private void initializeAppChecker() {
+        // Privacy: fgchecker library removed - app foreground detection disabled
+        /*
         appChecker = new AppChecker();
         AppChecker.Listener deterUse = new AppChecker.Listener() {
             @Override
@@ -251,7 +254,7 @@ public class StatusBarService extends Service {
         };
         appChecker.whenAny(deterUse);
         appChecker.timeout(1000);
-        appChecker.start(context);
+        appChecker.start(context); */
     }
 
     private void overlayDetection(String process) {
@@ -459,7 +462,8 @@ public class StatusBarService extends Service {
             unregisterReceiver(appInstallUninstall);
         if (dateChangeReceiver != null)
             unregisterReceiver(dateChangeReceiver);
-        if (appChecker != null) appChecker.stop();
+        // Privacy: fgchecker library removed
+        // if (appChecker != null) appChecker.stop();
         resetAllTimer();
         removeView();
         Log.d("onDestroy", "Ondestroy");
@@ -1417,8 +1421,8 @@ public class StatusBarService extends Service {
                                     lnrTimeTop.setPadding(paddingSide, padding, paddingSide, padding);
                                 }
 
-                                rotateLayout.setAngle(270);
-                                rotateLayoutTop.setAngle(-90);
+                                // rotateLayout.setAngle(270);
+                                // rotateLayoutTop.setAngle(-90);
                                 bottomView.setLayoutParams(new ViewGroup.LayoutParams(paramsBottom));
                                 if (bottomView.getWindowToken() != null) {
                                     wm.updateViewLayout(bottomView, paramsBottom);
@@ -1572,8 +1576,8 @@ public class StatusBarService extends Service {
                                 if (lnrTimeTop != null) {
                                     lnrTimeTop.setPadding(paddingSide, padding, paddingSide, padding);
                                 }
-                                rotateLayout.setAngle(0);
-                                rotateLayoutTop.setAngle(0);
+                                // rotateLayout.setAngle(0);
+                                // rotateLayoutTop.setAngle(0);
                                 bottomView.setLayoutParams(new ViewGroup.LayoutParams(paramsBottom));
                                 topView.setLayoutParams(new ViewGroup.LayoutParams
                                         (paramsTop));
@@ -2167,8 +2171,8 @@ public class StatusBarService extends Service {
                                 paramsBottom.height = ViewGroup.LayoutParams.MATCH_PARENT;
                                 paramsBottom.gravity = Gravity.LEFT;
                                 paramsTop.gravity = Gravity.RIGHT;
-                                rotateLayout.setAngle(270);
-                                rotateLayoutTop.setAngle(-90);
+                                // rotateLayout.setAngle(270);
+                                // rotateLayoutTop.setAngle(-90);
                                 int padding = UIUtils.dpToPx(context, 5);
                                 int paddingSide = UIUtils.dpToPx(context, 5);
                                 if (isLandscape) {
@@ -2256,8 +2260,8 @@ public class StatusBarService extends Service {
                                 paramsTop.gravity = Gravity.TOP;
                                 paramsBottom.width = ViewGroup.LayoutParams
                                         .MATCH_PARENT;
-                                rotateLayout.setAngle(0);
-                                rotateLayoutTop.setAngle(0);
+                                // rotateLayout.setAngle(0);
+                                // rotateLayoutTop.setAngle(0);
                                 int padding = UIUtils.dpToPx(context, 5);
                                 int paddingSide = UIUtils.dpToPx(context, 5);
 

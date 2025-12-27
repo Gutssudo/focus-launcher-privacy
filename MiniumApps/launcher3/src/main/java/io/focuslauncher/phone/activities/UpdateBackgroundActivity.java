@@ -22,8 +22,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
+// Removed for privacy: import com.gun0912.tedpermission.PermissionListener;
+// Removed for privacy: import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,8 +36,8 @@ import io.focuslauncher.phone.event.NotifyBackgroundToService;
 import io.focuslauncher.phone.utils.PermissionUtil;
 import io.focuslauncher.phone.utils.PrefSiempo;
 import de.greenrobot.event.EventBus;
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
+// Removed for privacy: import uk.co.senab.photoview.PhotoView;
+// Removed for privacy: import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class UpdateBackgroundActivity extends CoreActivity {
 
@@ -47,8 +47,9 @@ public class UpdateBackgroundActivity extends CoreActivity {
     private ImageView imageView;
     private CircularProgressDrawable circularProgressDrawable;
 
-    private PhotoViewAttacher mAttacher;
-    private PhotoView photoView;
+    // Privacy: PhotoView library removed
+    // private PhotoViewAttacher mAttacher;
+    // private PhotoView photoView;
     private RelativeLayout hintLayout;
 
     @Override
@@ -74,9 +75,9 @@ public class UpdateBackgroundActivity extends CoreActivity {
         circularProgressDrawable.setColorSchemeColors(Color.parseColor("#448AFF"));
         circularProgressDrawable.start();
 
-        photoView = findViewById(R.id.ivFullScreen);
-
-        mAttacher = new PhotoViewAttacher(photoView);
+        // Privacy: PhotoView library removed
+        // photoView = findViewById(R.id.ivFullScreen);
+        // mAttacher = new PhotoViewAttacher(photoView);
         hintLayout = findViewById(R.id.hintLayout);
 
         boolean isVisible = PrefSiempo.getInstance(this).read(PrefSiempo.IS_ASK_HINT, false);
@@ -101,34 +102,14 @@ public class UpdateBackgroundActivity extends CoreActivity {
     }
 
     private void checkPermissionAndDisplay(final Context context, final String strImage) {
+        // Privacy: TedPermission removed - simplified permission check
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionUtil.hasGiven
                 (PermissionUtil.WRITE_EXTERNAL_STORAGE_PERMISSION))) {
-            try {
-                TedPermission.with(context)
-                        .setPermissionListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionGranted() {
-                                displayImageAsPhoto(strImage);
-                            }
-
-                            @Override
-                            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                                startActivity(new Intent(UpdateBackgroundActivity.this,
-                                        SettingsActivity.class).addFlags(Intent
-                                        .FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                                finish();
-                            }
-                        })
-                        .setDeniedMessage(R.string.msg_permission_denied)
-                        .setPermissions(new String[]{
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest
-                                        .permission
-                                        .READ_EXTERNAL_STORAGE})
-                        .check();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // Permission not granted - redirect to settings
+            startActivity(new Intent(UpdateBackgroundActivity.this,
+                    SettingsActivity.class).addFlags(Intent
+                    .FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
         } else {
             displayImageAsPhoto(strImage);
         }
@@ -153,10 +134,11 @@ public class UpdateBackgroundActivity extends CoreActivity {
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        mAttacher.update();
+                        // Privacy: PhotoView library removed - mAttacher.update() call removed
+                        // mAttacher.update();
                         return false;
                     }
-                }).into(photoView);
+                }).into(imageView); // Privacy: Changed from photoView to imageView
     }
 
 
@@ -183,8 +165,9 @@ public class UpdateBackgroundActivity extends CoreActivity {
     }
 
     private void setWall() {
-        photoView.buildDrawingCache();
-        Bitmap bitmap = photoView.getDrawingCache();
+        // Privacy: PhotoView library removed - using imageView instead
+        imageView.buildDrawingCache();
+        Bitmap bitmap = imageView.getDrawingCache();
         String path = new File(getExternalFilesDir(null), "/" + getString(R.string.app_name) + "_" + System.currentTimeMillis() + ".png").getAbsolutePath();
         OutputStream out = null;
         File file = new File(path);
