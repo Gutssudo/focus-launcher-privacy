@@ -181,7 +181,12 @@ open class AlphaSettingsActivity : CoreActivity() {
     override fun onResume() {
         super.onResume()
         val locationManager = locationManager
-        registerReceiver(gpsLocationReceiver, IntentFilter(BROADCAST_ACTION))
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(gpsLocationReceiver, IntentFilter(BROADCAST_ACTION), Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(gpsLocationReceiver, IntentFilter(BROADCAST_ACTION))
+        }
         startTime = System.currentTimeMillis()
         if (permissionUtil?.hasGiven(PermissionUtil.LOCATION_PERMISSION) == false
             || locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false

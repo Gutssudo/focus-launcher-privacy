@@ -378,12 +378,22 @@ public class StatusBarService extends Service {
         intentFilter.addAction(Intent.ACTION_USER_PRESENT);
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        registerReceiver(userPresentBroadcastReceiver, intentFilter);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(userPresentBroadcastReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(userPresentBroadcastReceiver, intentFilter);
+        }
 
         dateChangeReceiver = new DateChangeReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_CHANGED);
-        registerReceiver(dateChangeReceiver, filter);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(dateChangeReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(dateChangeReceiver, filter);
+        }
     }
 
     @Override
@@ -418,7 +428,12 @@ public class StatusBarService extends Service {
         intentFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
         intentFilter.addAction(Intent.ACTION_PACKAGE_REPLACED);
         intentFilter.addDataScheme("package");
-        registerReceiver(appInstallUninstall, intentFilter);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(appInstallUninstall, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(appInstallUninstall, intentFilter);
+        }
 
 
     }

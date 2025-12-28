@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.util.Log;
 
 public class HomeWatcher {
@@ -32,7 +33,12 @@ public class HomeWatcher {
     public void startWatch() {
         if (mRecevier != null) {
             try {
-                mContext.registerReceiver(mRecevier, mFilter);
+                // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    mContext.registerReceiver(mRecevier, mFilter, Context.RECEIVER_NOT_EXPORTED);
+                } else {
+                    mContext.registerReceiver(mRecevier, mFilter);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

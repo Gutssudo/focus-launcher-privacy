@@ -124,7 +124,12 @@ public class ScreenFilterService extends Service implements ServiceLifeCycleCont
         orientationIntentFilter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
 
         mOrientationReceiver = new OrientationChangeReceiver(this, listener);
-        registerReceiver(mOrientationReceiver, orientationIntentFilter);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mOrientationReceiver, orientationIntentFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(mOrientationReceiver, orientationIntentFilter);
+        }
     }
 
     private void unregisterOrientationReceiver() {

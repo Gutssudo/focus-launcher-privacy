@@ -388,8 +388,12 @@ public class PaneFragment extends CoreFragment {
                     .transparent));
             ((DashboardActivity)getActivity()).changeLayoutBackground(ContextCompat.getColor(context, R.color.transparent));
         }
-        getActivity().registerReceiver(mKeyBoardReceiver, new IntentFilter(Utils
-                .KEYBOARD_ACTION));
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getActivity().registerReceiver(mKeyBoardReceiver, new IntentFilter(Utils.KEYBOARD_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            getActivity().registerReceiver(mKeyBoardReceiver, new IntentFilter(Utils.KEYBOARD_ACTION));
+        }
         pagerPane.setAlpha(1);
         if (DashboardActivity.currentIndexPaneFragment == 0 && DashboardActivity.isJunkFoodOpen) {
             DashboardActivity.currentIndexPaneFragment = 1;
