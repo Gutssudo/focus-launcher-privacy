@@ -113,13 +113,23 @@ public abstract class CoreActivity extends AppCompatActivity implements NFCInter
         intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         intentFilter.addAction(Intent.ACTION_SCREEN_ON);
         userPresentBroadcastReceiver = new UserPresentBroadcastReceiver();
-        registerReceiver(userPresentBroadcastReceiver, intentFilter);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(userPresentBroadcastReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(userPresentBroadcastReceiver, intentFilter);
+        }
 
         if (PrefSiempo.getInstance(this).read(PrefSiempo.SELECTED_THEME_ID, 0) != 0) {
             setTheme(PrefSiempo.getInstance(this).read(PrefSiempo.SELECTED_THEME_ID, 0));
         }
         try {
-            registerReceiver(mRecevier, mFilter);
+            // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(mRecevier, mFilter, Context.RECEIVER_NOT_EXPORTED);
+            } else {
+                registerReceiver(mRecevier, mFilter);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,7 +137,12 @@ public abstract class CoreActivity extends AppCompatActivity implements NFCInter
         mDownloadReceiver = new DownloadReceiver();
         IntentFilter downloadIntent = new IntentFilter();
         downloadIntent.addAction("android.intent.action.DOWNLOAD_COMPLETE");
-        registerReceiver(mDownloadReceiver, downloadIntent);
+        // Android 14+ requires RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED flag
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mDownloadReceiver, downloadIntent, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(mDownloadReceiver, downloadIntent);
+        }
 
         // TODO: consider to remove the dialog
 //        startAlarm();
