@@ -228,7 +228,9 @@ public class DashboardActivity extends CoreActivity implements InstallStateUpdat
         setContentView(R.layout.activity_dashboard);
         linMain = findViewById(R.id.linMain);
         appUpdateManager = AppUpdateManagerFactory.create(this);
-        registerAppUpdateListener();
+        // Temporarily disabled for Android 14 compatibility - Play Core library is deprecated
+        // TODO: Migrate to com.google.android.play:app-update:2.1.0+
+        // registerAppUpdateListener();
         imgBackground = findViewById(R.id.imgBackground);
         //linMain.setPadding(0, getStatusBarHeight(), 0, 0);
         swipeCount = PrefSiempo.getInstance(DashboardActivity.this).read(PrefSiempo.TOGGLE_LEFTMENU, 0);
