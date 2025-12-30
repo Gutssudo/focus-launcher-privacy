@@ -56,6 +56,18 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <TextClock
+        android:id="@+id/txtClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relTop"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:format24Hour="HH:mm - EEE d MMM"
+        android:format12Hour="h:mm a - EEE d MMM"
+        android:textSize="18sp"
+        android:textColor="@color/black_85"
+        android:fontFamily="sans-serif-medium"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
