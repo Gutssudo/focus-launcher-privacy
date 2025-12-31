@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.UserHandle;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
@@ -136,7 +138,16 @@ public class FavoritesPaneAdapter extends RecyclerView.Adapter<FavoritesPaneAdap
                 if (holder.linearLayout.getVisibility() == View.VISIBLE) {
                     if (!TextUtils.isEmpty(item.getPackageName())) {
                         FirebaseHelper.getInstance().logSiempoMenuUsage(1, "", CoreApplication.getInstance().getApplicationNameFromPackageName(item.getPackageName().trim()));
-                        new ActivityHelper(context).openAppWithPackageName(item.getPackageName().trim());
+
+                        // Check if this is a work profile app and get its UserHandle
+                        UserHandle userHandle = item.getUserHandle();
+
+                        // Launch app with UserHandle support for work profile apps
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && userHandle != null) {
+                            new ActivityHelper(context).openAppWithPackageName(item.getPackageName().trim(), userHandle);
+                        } else {
+                            new ActivityHelper(context).openAppWithPackageName(item.getPackageName().trim());
+                        }
                     }
                 }
             }

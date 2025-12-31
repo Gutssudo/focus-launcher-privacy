@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,7 +16,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
@@ -244,6 +247,57 @@ public abstract class CoreApplication extends MultiDexApplication {
     public void getAllApplicationPackageName() {
         packagesList.clear();
         new LoadApplications().execute();
+    }
+
+    /**
+     * Check if device has a work profile
+     */
+    public boolean hasWorkProfile() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && userManager != null) {
+            try {
+                List<UserHandle> profiles = userManager.getUserProfiles();
+                // If there's more than one profile, we likely have a work profile
+                return profiles != null && profiles.size() > 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the UserHandle for the work profile
+     */
+    public UserHandle getWorkProfileHandle() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && userManager != null) {
+            try {
+                List<UserHandle> profiles = userManager.getUserProfiles();
+                if (profiles != null && profiles.size() > 1) {
+                    // Return the profile that's not the first one (not personal profile)
+                    return profiles.get(1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check if work profile is available (not paused/quiet mode)
+     */
+    public boolean isWorkProfileAvailable() {
+        UserHandle workProfile = getWorkProfileHandle();
+        if (workProfile == null) return false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && userManager != null) {
+            try {
+                return !userManager.isQuietModeEnabled(workProfile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 
     @SuppressLint("HardwareIds")
@@ -1268,18 +1322,89 @@ public abstract class CoreApplication extends MultiDexApplication {
 
         @Override
         protected Set<String> doInBackground(Object... params) {
+            Set<String> applist = new HashSet<>();
+
+            // Use LauncherApps API for Android 5.0+ to support work profiles
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && userManager != null && launcherApps != null) {
+                try {
+                    // Get all user profiles (personal + work)
+                    List<UserHandle> userProfiles = userManager.getUserProfiles();
+
+                    for (UserHandle profile : userProfiles) {
+                        // Check if this is a work profile
+                        boolean isWorkProfile = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            try {
+                                // Work profile is any profile that's not the first one
+                                List<UserHandle> allProfiles = userManager.getUserProfiles();
+                                isWorkProfile = allProfiles != null && allProfiles.indexOf(profile) > 0;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        // Load apps for this profile
+                        List<LauncherActivityInfo> activities = launcherApps.getActivityList(null, profile);
+
+                        for (LauncherActivityInfo activityInfo : activities) {
+                            try {
+                                String packageName = activityInfo.getApplicationInfo().packageName;
+
+                                if (!packageName.equalsIgnoreCase(getPackageName())) {
+                                    // Cache icon
+                                    Drawable drawable = null;
+                                    try {
+                                        drawable = activityInfo.getIcon(0);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (drawable != null) {
+                                        Bitmap bitmap = PackageUtil.drawableToBitmap(drawable);
+                                        // Use different key for work profile apps
+                                        String cacheKey = isWorkProfile ? "work:" + packageName : packageName;
+                                        addBitmapToMemoryCache(cacheKey, bitmap);
+                                    }
+
+                                    applist.add(packageName);
+
+                                    // Store app name with profile prefix
+                                    String applicationName = activityInfo.getLabel().toString();
+                                    String nameKey = isWorkProfile ? "work:" + packageName : packageName;
+                                    getListApplicationName().put(nameKey, applicationName);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Fallback to old method if something fails
+                    return loadAppsLegacy();
+                }
+            } else {
+                // Fallback for Android 4.x or if LauncherApps unavailable
+                return loadAppsLegacy();
+            }
+
+            return applist;
+        }
+
+        // Legacy method for Android 4.x
+        private Set<String> loadAppsLegacy() {
             Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities(mainIntent, 0);
             Set<String> applist = new HashSet<>();
+
             for (ResolveInfo appInfo : pkgAppsList) {
                 try {
                     String packageName = appInfo.activityInfo.packageName;
                     if (!packageName.equalsIgnoreCase(getPackageName())) {
                         Drawable drawable = null;
                         try {
-                            drawable = appInfo.loadIcon
-                                    (getPackageManager());
+                            drawable = appInfo.loadIcon(getPackageManager());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1304,15 +1429,12 @@ public abstract class CoreApplication extends MultiDexApplication {
                             getListApplicationName().put(packageName, applicationName);
                         }
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
             return applist;
         }
-
 
         @Override
         protected void onPostExecute(Set<String> applicationInfos) {

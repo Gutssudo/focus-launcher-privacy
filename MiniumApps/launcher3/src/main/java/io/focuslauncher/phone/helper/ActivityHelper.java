@@ -4,8 +4,17 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.LauncherActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.os.UserHandle;
+import android.os.UserManager;
+import android.provider.Settings;
+import android.widget.Toast;
+
+import java.util.List;
 
 import io.focuslauncher.phone.activities.AlphaSettingsActivity;
 import io.focuslauncher.phone.activities.NoteListActivity;
@@ -94,19 +103,81 @@ public class ActivityHelper {
      * Open the application with predefine package name.
      */
     public boolean openAppWithPackageName(String packageName) {
-        if (packageName != null && !packageName.equalsIgnoreCase("")) {
-            try {
-                new DBClient().deleteMsgByPackageName(packageName);
+        return openAppWithPackageName(packageName, null);
+    }
+
+    /**
+     * Open the application with package name and user profile support.
+     * @param packageName The package name of the app to launch
+     * @param userHandle The UserHandle for work profile apps, null for personal profile
+     */
+    public boolean openAppWithPackageName(String packageName, UserHandle userHandle) {
+        if (packageName == null || packageName.equalsIgnoreCase("")) {
+            UIUtils.alert(context, context.getString(R.string.app_not_found));
+            return false;
+        }
+
+        try {
+            new DBClient().deleteMsgByPackageName(packageName);
+
+            // Use LauncherApps for work profile apps on Android 5.0+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && userHandle != null) {
+                LauncherApps launcherApps = (LauncherApps) context.getSystemService(Context.LAUNCHER_APPS_SERVICE);
+                UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+
+                if (launcherApps == null || userManager == null) {
+                    throw new Exception("LauncherApps or UserManager not available");
+                }
+
+                // Check if work profile is paused (Android 7.0+)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (userManager.isQuietModeEnabled(userHandle)) {
+                        Toast.makeText(context,
+                                "Le profil professionnel est en pause. Activez-le pour lancer cette application.",
+                                Toast.LENGTH_LONG).show();
+
+                        // Open settings to enable profile
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                // Try to open general settings (work profile settings may not be directly accessible)
+                                Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                                context.startActivity(intent);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+                }
+
+                // Launch work profile app via LauncherApps
+                List<LauncherActivityInfo> activities = launcherApps.getActivityList(packageName, userHandle);
+
+                if (!activities.isEmpty()) {
+                    LauncherActivityInfo activity = activities.get(0);
+                    launcherApps.startMainActivity(
+                            activity.getComponentName(),
+                            userHandle,
+                            null,  // sourceBounds
+                            null   // opts
+                    );
+                    return true;
+                } else {
+                    throw new Exception("No activities found for package: " + packageName);
+                }
+            } else {
+                // Standard launch for personal profile or legacy Android
                 Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-                context.startActivity(intent);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                CoreApplication.getInstance().logException(e);
-                UIUtils.alert(context, context.getString(R.string.app_not_found));
-                return false;
+                if (intent != null) {
+                    context.startActivity(intent);
+                    return true;
+                } else {
+                    throw new Exception("Launch intent not found for package: " + packageName);
+                }
             }
-        } else {
+        } catch (Exception e) {
+            e.printStackTrace();
+            CoreApplication.getInstance().logException(e);
             UIUtils.alert(context, context.getString(R.string.app_not_found));
             return false;
         }

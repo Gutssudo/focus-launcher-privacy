@@ -212,6 +212,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="io.focuslauncher.phone.receivers.WorkProfileStateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGED_PROFILE_AVAILABLE" />
+                <action android:name="android.intent.action.MANAGED_PROFILE_UNAVAILABLE" />
+                <action android:name="android.intent.action.MANAGED_PROFILE_UNLOCKED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name="io.focuslauncher.phone.activities.DashboardActivity"
             android:clearTaskOnLaunch="true"

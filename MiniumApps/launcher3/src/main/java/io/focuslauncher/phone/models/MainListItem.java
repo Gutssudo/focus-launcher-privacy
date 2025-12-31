@@ -1,6 +1,8 @@
 package io.focuslauncher.phone.models;
 
 import android.content.pm.ApplicationInfo;
+import android.graphics.drawable.Drawable;
+import android.os.UserHandle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +28,11 @@ public class MainListItem implements Serializable {
     private ApplicationInfo applicationInfo = null;
     private boolean isVisable;
     private String category="";
+
+    // Work profile support fields
+    private UserHandle userHandle;
+    private boolean isWorkProfileApp = false;
+    private Drawable profileBadgeDrawable;
 
 //    private Date currentDateTime;
     /**
@@ -257,6 +264,31 @@ public class MainListItem implements Serializable {
 
     public void setImageUri(String imageUri) {
         this.imageUri = imageUri;
+    }
+
+    // Work profile support methods
+    public UserHandle getUserHandle() {
+        return userHandle;
+    }
+
+    public void setUserHandle(UserHandle userHandle) {
+        this.userHandle = userHandle;
+    }
+
+    public boolean isWorkProfileApp() {
+        return isWorkProfileApp;
+    }
+
+    public void setWorkProfileApp(boolean workProfileApp) {
+        this.isWorkProfileApp = workProfileApp;
+    }
+
+    public Drawable getProfileBadgeDrawable() {
+        return profileBadgeDrawable;
+    }
+
+    public void setProfileBadgeDrawable(Drawable profileBadgeDrawable) {
+        this.profileBadgeDrawable = profileBadgeDrawable;
     }
 
     public class ContactNumber {

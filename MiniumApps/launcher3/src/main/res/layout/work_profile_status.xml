@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+    <io.focuslauncher.phone.customviews.RobotoRegularTextView
+        android:id="@+id/txtWorkProfileStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="12sp"
+        android:textColor="@color/black_50"
+        android:text="Profil professionnel actif"/>
+
+    <View
+        android:id="@+id/imgWorkProfileStatusIndicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/appland_blue_bright"/>
+</LinearLayout>
