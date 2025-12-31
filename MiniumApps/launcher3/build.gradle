@@ -26,7 +26,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
-        versionCode 7
+        versionCode 8
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         buildConfigField "String", project.KEY_GIT_SHA, "\"${gitSha}\""
@@ -52,7 +52,7 @@ android {
     productFlavors {
         alpha {
             dimension "type"
-            versionName "1.0.2"
+            versionName "1.0.8"
         }
         beta {
             dimension "type"
